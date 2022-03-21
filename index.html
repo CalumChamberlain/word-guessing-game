@@ -28,8 +28,7 @@
 
 <script>
     const possibleWords = ['apple', 'banana', 'orange', 'pear', 'papaya', 'kiwi', 'lemon', 'peach', 'raspberry', 'mango', 'fig', 'plum'];
-    const randomWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
-
+    let randomWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
     let answerArray = [];
     let lives = 5;
 
@@ -85,6 +84,7 @@
 
     function resetGame() {
         lives = 5;
+        randomWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
         answerArray = [];
         remainingLetters = randomWord.length;
 
