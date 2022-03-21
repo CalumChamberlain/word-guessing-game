@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Word Guessing Game</title>
+    </head>
+    <body>
+        <h1>Word Guessing Game</h1>
+        <div id="game">
+            <p id="lives"></p>
+            <input type="text" name="letter" id="letter" placeholder="Enter a letter" />
+            <button onClick="submitLetter()">Submit</button>
+            <p id="anwser"></p>
+        </div>
+
+        <div id="loseMessage" class="hidden">
+            <p>You Lose!</p>
+            <button onClick="resetGame()">Play Again</button>
+        </div>
+        <div id="winMessage" class="hidden">
+            <p>You Win!</p>
+            <button onClick="resetGame()">Play Again</button>
+        </div>
+    </body>
+</html>
+
+<script>
+    const possibleWords = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const randomWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
+
+    let answerArray = [];
+    let lives = 5;
+
+    for (let i = 0; i < randomWord.length; i++) {
+        answerArray[i] = '_';
+    }
+
+    let remainingLetters = randomWord.length;
+
+    renderGame();
+
+    let letterInput = document.getElementById('letter');
+    letterInput.addEventListener('keyup', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            submitLetter();
+        }
+    });
+
+    function submitLetter() {
+        let letterInput = document.getElementById('letter');
+        let letter = letterInput.value;
+
+        if (answerArray.includes(letter)) {
+            alert('You already guessed this letter');
+        } else if (randomWord.includes(letter)) {
+            for (let i = 0; i < randomWord.length; i++) {
+                if (randomWord[i] === letter) {
+                    answerArray[i] = letter;
+                    remainingLetters--;
+
+                    if (remainingLetters === 0) {
+                        document.getElementById('anwser').innerHTML = answerArray.join('');
+                        document.getElementById('winMessage').classList.remove('hidden');
+                    }
+                }
+            }
+        } else {
+            lives--;
+            if (lives === 0) {
+                document.getElementById('game').classList.add('hidden');
+                document.getElementById('loseMessage').classList.remove('hidden');
+            }
+        }
+        letterInput.value = '';
+        renderGame();
+    }
+
+    function renderGame() {
+        document.getElementById('anwser').innerHTML = answerArray.join(' ');
+        document.getElementById('lives').innerHTML = lives + ' lives remaining';
+    }
+
+    function resetGame() {
+        lives = 5;
+        answerArray = [];
+        remainingLetters = randomWord.length;
+
+        for (let i = 0; i < randomWord.length; i++) {
+            answerArray[i] = '_';
+        }
+
+        renderGame();
+        document.getElementById('game').classList.remove('hidden');
+        document.getElementById('loseMessage').classList.add('hidden');
+        document.getElementById('winMessage').classList.add('hidden');
+    }
+</script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
